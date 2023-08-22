@@ -3,10 +3,32 @@ import Card from './Card'
 
 const Main = () => {
 
-  const myname = ["Shekhar", "Farhan", "Nakul", "Nirmal"]
+  // const myname = ["Shekhar", "Farhan", "Nakul", "Nirmal"]
+  
+  const [myfavcolor, setmyfavcolor] = useState("#e3c924") //  Default Value
 
-  const [show, setShow] = useState(false) // Default Value
-  const [color, setColor] = useState("red") //  Default Value
+  const [value, setValue] = useState(0) //  Default Value
+
+  console.log("myfavcolor", myfavcolor)
+
+
+  const add = (a,b) =>{
+    let sum = a + b
+    setValue(sum)
+  }
+
+  const subtract = (a,b) =>{
+    let sub = a - b
+    setValue(sub)
+  }
+
+  function multiply(a,b) {
+    let mult = a * b
+    setValue(mult)
+  }
+
+
+  // const [show, setShow] = useState(false) // Default Value
 
   // if(show === true){
   //   alert("value is true")
@@ -16,27 +38,21 @@ const Main = () => {
 
   //  show ? "valuee is true" : "value is false" ---> ternary operators
 
-  console.log("show", show)
   return (
     <div className='row'>
-      <h2 style={{ color: color }}>Main</h2>
+      <h2 style={{ color: myfavcolor }}>Main</h2>
+      <h2>{`the addition of numbers a and b is ${value}`}</h2>
       <div className='col'>
-        <button onClick={() => setColor("green")} className='btn btn-primary'>change color</button>
-        <button onClick={() => { setShow(!show) }} className='btn btn-primary mt-2 mx-2'>
-          {show ? "Hide cards" : " Show Cards"}</button>
+      {/* <button onClick={() => setmyfavcolor("#256cc4")} className='btn btn-primary mx-2'>change color to blue</button>
+      <button onClick={() => setmyfavcolor("#ed2a2a")} className='btn btn-primary mx-2'>change color to red</button>
+      <button onClick={() => setmyfavcolor("#37cd23")} className='btn btn-primary mx-2'>change color to green</button>
+      <button onClick={() => setmyfavcolor("#000000")} className='btn btn-primary mx-2'>change color to black</button> */}
+        
+
+      <button onClick={() => add(25,15)} className='btn btn-primary mx-2'>ADD</button>
+      <button onClick={() => subtract(25,15)} className='btn btn-primary mx-2'>SUBTRACT</button>
+      <button onClick={() => multiply(25,15)} className='btn btn-primary mx-2'>MULTIPLY</button>
       </div>
-
-      {show ? myname.map((value, index) => {
-        if (index == 1 || index == 3) {
-          return (<div className='col-md-3'>
-            <Card name={value} number={index} />
-          </div>)
-        } 
-      }
-
-
-      ) : null}
-
 
     </div>
   )
