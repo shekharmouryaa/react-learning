@@ -1,5 +1,5 @@
 import React from "react";
-import Footer from "./Footer";
+// import Footer from "./Footer";
 import { Header } from "./Header";
 import Main from "./Main";
 
@@ -10,7 +10,7 @@ const Home = () =>{
         <div>
             <Header/>
             <Main/>
-            <Footer/>
+            {/* <Footer/> */}
         </div>
     )
 }
