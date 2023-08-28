@@ -2,26 +2,14 @@ import React, { useState } from 'react'
 
 export const StudentData = () => {
     
-    const localStorageData = JSON.parse(localStorage.getItem("student-details")) ?? []
+    // To get local storage data
+    const localStudnetEntries = JSON.parse(localStorage.getItem("student-entries")) ?? []
 
+    
     // STEP - 1 (Set name and value in input field)
     const [form, setForm] = useState({ firstName: "", lastName: "", email: "", phoneNumber: "" })
-    const [studentDetail, setStudentDetail] = useState(localStorageData)
-
-    // const data= [
-    //     {firstName:"a", lastName:"b", email:"b",phoneNumber:"d"},
-    //     {firstName:"q", lastName:"e", email:"r",phoneNumber:"t"},
-    //     {firstName:"q", lastName:"e", email:"r",phoneNumber:"t"},
-    // ]
-
-    // let newData = data.concat({firstName:"mm", lastName:"bb", email:"nn",phoneNumber:"rr"})
-    // let newData1 = data.push({firstName:"mm", lastName:"bb", email:"nn",phoneNumber:"rr"})
-    // console.log("newData", newData)
-    // console.log("newData1", newData1)
-    // console.log("data", data)
-
-    // STEP -2 (add in all input in onChange)
-
+    const [studentDetail, setStudentDetail] = useState(localStudnetEntries)
+    
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value })
     }
@@ -32,11 +20,18 @@ export const StudentData = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        console.log("form", form);
+        // console.log("form", form);
         let updatedData = studentDetail.concat(form)
-        setStudentDetail(updatedData)
-        localStorage.setItem("student-details", JSON.stringify(updatedData))
-        setForm({ firstName: "", lastName: "", email: "", phoneNumber: "" })
+        setStudentDetail(updatedData) // to store data in local state
+        localStorage.setItem("student-entries", JSON.stringify(updatedData)) // TO store Data in localStorage
+        setForm({ firstName: "", lastName: "", email: "", phoneNumber: "" }) // Form reset
+    } 
+
+    // DELTE ITEMS
+    const deleteItem = (email) =>{
+        let updatedEntries = studentDetail.filter(student => student.email !== email )
+        setStudentDetail(updatedEntries)
+        localStorage.setItem("student-entries", JSON.stringify(updatedEntries))
     }
 
     return (
@@ -73,19 +68,20 @@ export const StudentData = () => {
                             <th scope="col">Last Name</th>
                             <th scope="col">Email</th>
                             <th scope="col">Phone Number</th>
+                            <th scope="col">Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        { localStorageData.map((student,index) => 
+                        { studentDetail.map((student,index) => 
                         <tr>
                         <td>{index+1}</td>
                         <td>{student.firstName}</td>
                         <td>{student.lastName}</td>
                         <td>{student.email}</td>
                         <td>{student.phoneNumber}</td>
+                        <td><button className='btn btn-danger' onClick={()=>deleteItem(student.email)}>{"Delete"}</button></td>
                        </tr>
                         )
-
                         }
                     </tbody>
                 </table>
