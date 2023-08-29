@@ -1,6 +1,9 @@
 import React, { useState } from 'react'
 
 export const StudentData = () => {
+
+    const [isEdit , setEdit] = useState(false)
+    const [email , selectedEmail] = useState("")
     
     // To get local storage data
     const localStudnetEntries = JSON.parse(localStorage.getItem("student-entries")) ?? []
@@ -33,11 +36,39 @@ export const StudentData = () => {
         setStudentDetail(updatedEntries)
         localStorage.setItem("student-entries", JSON.stringify(updatedEntries))
     }
+    
+    // STEP - 1 for Edit
+    const editItem = (email) =>{
+        let selectedEntry = studentDetail.filter(student => student.email === email )
+        setForm(selectedEntry[0])
+        setEdit(true)
+        selectedEmail(email)
+    }
+
+    // STEP -2 update entries
+    const handleUpdate =(e) =>{
+        e.preventDefault()
+        let updatedData = studentDetail.map(student => {
+            if(student.email === email){
+                return form
+            }else{
+                return student
+            }
+        })
+        setStudentDetail(updatedData) // to store data in local state
+        localStorage.setItem("student-entries", JSON.stringify(updatedData)) // TO store Data in localStorage
+        resetForm()
+    }
+
+    const resetForm =()=>{
+        setForm({ firstName: "", lastName: "", email: "", phoneNumber: "" }) // Form reset
+        setEdit(false)
+    }
 
     return (
         <div className='ms-4'>
             <h3>Student Form</h3>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={isEdit ? handleUpdate : handleSubmit}>
                 <div class="form-row row" style={{ width: "300px" }}>
                     <div class="col-md-12 my-3 ">
                         <input type="text" name={"firstName"} value={form.firstName} class="form-control"
@@ -55,7 +86,8 @@ export const StudentData = () => {
                         <input type="number" name={"phoneNumber"} value={form.phoneNumber} class="form-control"
                             onChange={(e) => handleChange(e)} placeholder="phone Number" />
                     </div>
-                    <button type='submit' className='btn btn-outline-primary'>Submit</button>
+                    <button type='submit' className={`btn ${isEdit ? "btn-success": "btn-primary"}`}>{isEdit ? "Update" :"Submit"}</button>
+                    <div onClick={()=>resetForm()} className={`btn mt-3 btn-danger`}>{isEdit ? "Cancel" :"Reset"}</div>
                 </div>
             </form>
             <div className='mt-3'>
@@ -79,7 +111,10 @@ export const StudentData = () => {
                         <td>{student.lastName}</td>
                         <td>{student.email}</td>
                         <td>{student.phoneNumber}</td>
-                        <td><button className='btn btn-danger' onClick={()=>deleteItem(student.email)}>{"Delete"}</button></td>
+                        <td>
+                            <button className='btn btn-danger' onClick={()=>deleteItem(student.email)}>{"Delete"}</button>
+                            <button className='btn btn-warning ms-2' onClick={()=>editItem(student.email)}>{"Edit"}</button>
+                        </td>
                        </tr>
                         )
                         }
