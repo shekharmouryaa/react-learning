@@ -1,10 +1,18 @@
 import React, { useState } from 'react'
+import { toast } from 'react-toastify'
+import BasicModal from './Modal';
+// import Button from '@mui/material/Button';
+// import { TextField } from '@mui/material';
+// import Switch from '@mui/material/Switch';
 
 export const StudentData = () => {
+    // const label = { inputProps: { 'aria-label': 'Switch demo' } };
 
     const [isEdit , setEdit] = useState(false)
     const [email , selectedEmail] = useState("")
-    
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
     // To get local storage data
     const localStudnetEntries = JSON.parse(localStorage.getItem("student-entries")) ?? []
 
@@ -28,6 +36,8 @@ export const StudentData = () => {
         setStudentDetail(updatedData) // to store data in local state
         localStorage.setItem("student-entries", JSON.stringify(updatedData)) // TO store Data in localStorage
         setForm({ firstName: "", lastName: "", email: "", phoneNumber: "" }) // Form reset
+        toast.success("Student Details Added Successfully")
+        handleClose()
     } 
 
     // DELTE ITEMS
@@ -35,6 +45,7 @@ export const StudentData = () => {
         let updatedEntries = studentDetail.filter(student => student.email !== email )
         setStudentDetail(updatedEntries)
         localStorage.setItem("student-entries", JSON.stringify(updatedEntries))
+        toast.success("Student Details deleted Successfully")
     }
     
     // STEP - 1 for Edit
@@ -58,6 +69,7 @@ export const StudentData = () => {
         setStudentDetail(updatedData) // to store data in local state
         localStorage.setItem("student-entries", JSON.stringify(updatedData)) // TO store Data in localStorage
         resetForm()
+        toast.success("Student Details Updated Successfully")
     }
 
     const resetForm =()=>{
@@ -67,29 +79,27 @@ export const StudentData = () => {
 
     return (
         <div className='ms-4'>
-            <h3>Student Form</h3>
-            <form onSubmit={isEdit ? handleUpdate : handleSubmit}>
-                <div class="form-row row" style={{ width: "300px" }}>
-                    <div class="col-md-12 my-3 ">
-                        <input type="text" name={"firstName"} value={form.firstName} class="form-control"
-                            onChange={(e) => handleChange(e)} placeholder="First name" />
-                    </div>
-                    <div class="col-md-12 my-3">
-                        <input type="text" name={"lastName"} value={form.lastName} class="form-control"
-                            onChange={(e) => handleChange(e)} placeholder="Last name" />
-                    </div>
-                    <div class="col-md-12 my-3">
-                        <input type="email" name={"email"} value={form.email} class="form-control"
-                            onChange={(e) => handleChange(e)} placeholder="email" />
-                    </div>
-                    <div class="col-md-12 my-3">
-                        <input type="number" name={"phoneNumber"} value={form.phoneNumber} class="form-control"
-                            onChange={(e) => handleChange(e)} placeholder="phone Number" />
-                    </div>
-                    <button type='submit' className={`btn ${isEdit ? "btn-success": "btn-primary"}`}>{isEdit ? "Update" :"Submit"}</button>
-                    <div onClick={()=>resetForm()} className={`btn mt-3 btn-danger`}>{isEdit ? "Cancel" :"Reset"}</div>
-                </div>
-            </form>
+            
+            {/* <Button variant="contained">Contained</Button>
+      <Button className='mx-3' variant="outlined">Outlined</Button> */}
+
+      {/* <TextField id="outlined-basic" label="Outlined" variant="outlined" />
+      <TextField id="filled-basic" label="Filled" variant="filled" />
+      <TextField id="standard-basic" label="Standard" variant="standard" /> */}
+
+          {/* <Switch {...label} defaultChecked /> */}
+          <BasicModal 
+          isEdit={isEdit}
+          handleChange={handleChange}
+          handleSubmit={handleSubmit}
+          handleUpdate={handleUpdate}
+          form={form}
+          resetForm={resetForm}
+          open={open}
+          handleOpen={handleOpen}
+          handleClose={handleClose}
+           />
+            
             <div className='mt-3'>
                 <h3>Student Details</h3>
                 <table class="table table-striped">

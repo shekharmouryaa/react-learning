@@ -3,6 +3,7 @@ import React from 'react'
 import { StudentData } from './StudentData'
 
 const Main = () => {
+  
 
   return (
     <div className='row'>
