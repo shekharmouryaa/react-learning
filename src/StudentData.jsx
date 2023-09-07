@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { toast } from 'react-toastify'
 import BasicModal from './Modal';
+import moment from 'moment';
+import AlertDialog from './ConfirmDialog';
 // import Button from '@mui/material/Button';
 // import { TextField } from '@mui/material';
 // import Switch from '@mui/material/Switch';
@@ -11,14 +13,29 @@ export const StudentData = () => {
     const [isEdit , setEdit] = useState(false)
     const [email , selectedEmail] = useState("")
     const [open, setOpen] = React.useState(false);
+    const [openDailog, setOpenDailog] = React.useState(false);
+
+    const handleClickOpen = (email) => {
+        selectedEmail(email)
+        setOpenDailog(true);
+    };
+  
+    const handleClickClose = () => {
+        setOpenDailog(false);
+    };
+
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+
+
     // To get local storage data
     const localStudnetEntries = JSON.parse(localStorage.getItem("student-entries")) ?? []
 
     
     // STEP - 1 (Set name and value in input field)
-    const [form, setForm] = useState({ firstName: "", lastName: "", email: "", phoneNumber: "" })
+    const [form, setForm] = useState(
+        { firstName: "", lastName: "", email: "", phoneNumber: "", created_at: new Date() }
+        )
     const [studentDetail, setStudentDetail] = useState(localStudnetEntries)
     
     const handleChange = (e) => {
@@ -41,11 +58,12 @@ export const StudentData = () => {
     } 
 
     // DELTE ITEMS
-    const deleteItem = (email) =>{
+    const deleteItem = () =>{
         let updatedEntries = studentDetail.filter(student => student.email !== email )
         setStudentDetail(updatedEntries)
         localStorage.setItem("student-entries", JSON.stringify(updatedEntries))
         toast.success("Student Details deleted Successfully")
+        handleClickClose()
     }
     
     // STEP - 1 for Edit
@@ -54,6 +72,7 @@ export const StudentData = () => {
         setForm(selectedEntry[0])
         setEdit(true)
         selectedEmail(email)
+        setOpen(true)
     }
 
     // STEP -2 update entries
@@ -69,6 +88,7 @@ export const StudentData = () => {
         setStudentDetail(updatedData) // to store data in local state
         localStorage.setItem("student-entries", JSON.stringify(updatedData)) // TO store Data in localStorage
         resetForm()
+        setOpen(false)
         toast.success("Student Details Updated Successfully")
     }
 
@@ -79,15 +99,13 @@ export const StudentData = () => {
 
     return (
         <div className='ms-4'>
-            
-            {/* <Button variant="contained">Contained</Button>
-      <Button className='mx-3' variant="outlined">Outlined</Button> */}
+         <AlertDialog 
+         openDailog={openDailog} 
+         handleClickClose={handleClickClose} 
+         handleClickOpen={handleClickOpen} 
+         deleteItem={deleteItem}
+         />
 
-      {/* <TextField id="outlined-basic" label="Outlined" variant="outlined" />
-      <TextField id="filled-basic" label="Filled" variant="filled" />
-      <TextField id="standard-basic" label="Standard" variant="standard" /> */}
-
-          {/* <Switch {...label} defaultChecked /> */}
           <BasicModal 
           isEdit={isEdit}
           handleChange={handleChange}
@@ -110,6 +128,7 @@ export const StudentData = () => {
                             <th scope="col">Last Name</th>
                             <th scope="col">Email</th>
                             <th scope="col">Phone Number</th>
+                            <th scope="col">Created At</th>
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
@@ -121,8 +140,9 @@ export const StudentData = () => {
                         <td>{student.lastName}</td>
                         <td>{student.email}</td>
                         <td>{student.phoneNumber}</td>
+                        <td>{moment(student.created_at).format("llll")}</td>
                         <td>
-                            <button className='btn btn-danger' onClick={()=>deleteItem(student.email)}>{"Delete"}</button>
+                            <button className='btn btn-danger' onClick={()=>handleClickOpen(student.email)}>{"Delete"}</button>
                             <button className='btn btn-warning ms-2' onClick={()=>editItem(student.email)}>{"Edit"}</button>
                         </td>
                        </tr>
