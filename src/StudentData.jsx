@@ -6,6 +6,7 @@ import AlertDialog from './ConfirmDialog';
 // import Button from '@mui/material/Button';
 // import { TextField } from '@mui/material';
 // import Switch from '@mui/material/Switch';
+import { useNavigate } from "react-router-dom";
 
 export const StudentData = () => {
     // const label = { inputProps: { 'aria-label': 'Switch demo' } };
@@ -46,6 +47,8 @@ export const StudentData = () => {
 
     // STEP -3  (submit form value)
 
+    const navigate  = useNavigate();
+
     const handleSubmit = (e) => {
         e.preventDefault()
         // console.log("form", form);
@@ -55,6 +58,7 @@ export const StudentData = () => {
         setForm({ firstName: "", lastName: "", email: "", phoneNumber: "" }) // Form reset
         toast.success("Student Details Added Successfully")
         handleClose()
+        navigate("/about");
     } 
 
     // DELTE ITEMS

@@ -4,10 +4,8 @@ import { StudentData } from './StudentData'
 
 const Main = () => {
   
-
   return (
     <div className='row'>
-      {/* <RegistrationForm/> */}
       <StudentData/>
     </div>
   )

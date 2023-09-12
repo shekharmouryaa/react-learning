@@ -1,19 +1,30 @@
 import React from "react";
 // import Footer from "./Footer";
 import { Header } from "./Header";
-import Main from "./Main";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const Home = () =>{
+import {BrowserRouter as Router ,Route, Routes } from 'react-router-dom';
+import About from "./About";
+import Main from "./Main";
+import Gallery from "./Gallery";
+import Thanks from "./Thanks";
+
+const Home = () => {
 
     return (
-        <div>
-             <ToastContainer />
-            <Header/>
-            <Main/>
-            {/* <Footer/> */}
-        </div>
+        <>
+            <Router>
+                <ToastContainer />
+                <Header />
+                <Routes>
+                    <Route path="/" element={<Main />} />
+                    <Route path="/about" element={<About />} />
+                    <Route path="/gallery" element={<Gallery />} />
+                    <Route path="/thankyou" element={<Thanks />} />
+                </Routes>
+            </Router>
+        </>
     )
 }
 
