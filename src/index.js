@@ -2,14 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './main.css';
 import reportWebVitals from './reportWebVitals';
-import Home from './Home'
 import 'bootstrap/dist/css/bootstrap.css';
+import MainRoutes from './pages/MainRoutes';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-    <Home/>
-  </React.StrictMode>
+    <MainRoutes/>
 );
 
 // If you want to start measuring performance in your app, pass a function
