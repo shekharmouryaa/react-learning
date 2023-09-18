@@ -14,6 +14,11 @@ export const Header = () => {
             <li class="nav-item ">
               <Link class="nav-link" to="/allproducts" ><strong>All Products</strong></Link>
             </li>
+            <li class="nav-item ">
+              <Link class="nav-link" to="/addproduct" ><strong>Add New Product</strong></Link>
+            </li>
+
+            
           </ul>
         </div>
       </nav>
