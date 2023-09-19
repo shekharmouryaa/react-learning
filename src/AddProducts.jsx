@@ -15,7 +15,7 @@ const AddProducts = () => {
     const addProduct = (e) => {
         e.preventDefault()
         fetch('https://fakestoreapi.com/products', {
-            method: "PUT",
+            method: "POST",
             body: JSON.stringify(form)
         })
             .then(res => res.json())
