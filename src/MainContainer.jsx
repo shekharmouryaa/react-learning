@@ -16,13 +16,30 @@ const MainContainer = () => {
     
     const [users , setUsers] = useState([])
     const [form , setForm] = useState(userForm)
+    const [isEdit , setIsEdit] = useState(false)
+    const [selectedUserId , setSelectedUserId] = useState("")
 
 
     const getAllUsers = () =>{
-        fetch('https://mern-admin-backend-jxw3.onrender.com/general/users')
+        fetch('https://mern-admin-backend-jxw3.onrender.com/general/users',{
+            method :"GET"
+        })
         .then(res => res.json())
         .then(data => setUsers(data))
     }
+
+    const deleteUser = (userid) => {
+        fetch(`https://mern-admin-backend-jxw3.onrender.com/general/user/delete/${userid}`, {
+            method :'DELETE'
+        })
+        .then(res => res.json())
+        .then(data =>{
+            toast.success(data.message)
+            let updatedUsers = users.filter(item => item._id !== userid)
+            setUsers(updatedUsers)
+            // getAllUsers()
+            } )
+       };
 
     useEffect(()=>{
         getAllUsers()
@@ -34,35 +51,42 @@ const MainContainer = () => {
 
     const addNewUser =(e) =>{
         e.preventDefault()
-        console.log(form)
         fetch("https://mern-admin-backend-jxw3.onrender.com/general/user/add", {
             method :'POST',
             body: JSON.stringify(form)
-        })
-        .then(res => res.json())
-        .then(data =>{
-            console.log(data)
-            toast.success(data.message)
+        }).then(res => res.json()).then(data =>{
             let updatedUsers = users.concat(form)
             setUsers(updatedUsers)
-            toast.success(data.message)
+            toast.success("User Added Successfully")
             setForm(userForm)
-            // getAllUsers()
             } )
        };
 
-    
-    const deleteUser = (userid) => {
-        fetch(`https://mern-admin-backend-jxw3.onrender.com/general/user/delete/${userid}`, {
-            method :'DELETE'
-        })
-        .then(res => res.json())
-        .then(data =>{
-            console.log(data)
-            toast.success(data.message)
-            let updatedUsers = users.filter(item => item._id !== userid)
+
+       const editUser = (userid) =>{
+        let selectedUser = users.filter(item => item._id === userid)
+        setForm(selectedUser[0])
+        setIsEdit(true)
+        setSelectedUserId(userid)
+       }
+
+       const updateUser = (e) =>{
+        e.preventDefault()
+        fetch(`https://mern-admin-backend-jxw3.onrender.com/general/user/update/${selectedUserId}`, {
+            method :'PUT',
+            body: JSON.stringify(form)
+        }).then(res => res.json()).then(data =>{
+            toast.success("User Updated Successfully")
+            setForm(userForm)
+            setIsEdit(false)
+            let updatedUsers = users.map(val =>{
+                if(val._id === selectedUserId){
+                    return form 
+                }else{
+                    return val
+                }
+            })
             setUsers(updatedUsers)
-            // getAllUsers()
             } )
        };
 
@@ -71,8 +95,8 @@ const MainContainer = () => {
     <div>
     <div className='m-4' p-4>
     <div>
-            <h3>Add New User</h3>
-            <form onSubmit={addNewUser}>
+            <h3>{isEdit ? "Update User" : "Add New User"}</h3>
+            <form onSubmit={isEdit ? updateUser : addNewUser}>
                 <div class="form-row row" style={{ width: "300px" }}>
                     <div class="col-md-12 my-3 ">
                         <input type="text" name={"name"} value={form.name} class="form-control" 
@@ -98,7 +122,12 @@ const MainContainer = () => {
                         <input type="text" name={"occupation"} value={form.occupation} class="form-control" 
                         onChange={handleChange} placeholder="Occupation" />
                     </div>
+                   {
+                    isEdit ?
+                    <button type='submit' className='btn btn-success'>Update</button> :
                     <button type='submit' className='btn btn-outline-primary'>Submit</button>
+
+                   }
                 </div>
             </form>
         </div>
@@ -131,7 +160,7 @@ const MainContainer = () => {
                             <button className='btn btn-danger' onClick={()=>deleteUser(student._id)}>{"Delete"}</button>
                         </td>
                         <td>
-                        <button className='btn btn-warning ms-2' >{"Edit"}</button>
+                        <button className='btn btn-warning ms-2' onClick={()=>editUser(student._id)} >{"Edit"}</button>
                         </td>
                        </tr>
                         )
