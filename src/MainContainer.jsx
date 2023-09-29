@@ -20,16 +20,22 @@ const MainContainer = () => {
     const [selectedUserId , setSelectedUserId] = useState("")
 
 
+    const baseUrl = "http://localhost:5000"
+    // const baseUrl = "https://mern-admin-backend-jxw3.onrender.com"
+  
     const getAllUsers = () =>{
-        fetch('https://mern-admin-backend-jxw3.onrender.com/general/users',{
+        fetch(`${baseUrl}/general/employees`,{
             method :"GET"
         })
         .then(res => res.json())
-        .then(data => setUsers(data))
+        .then(data => setUsers(data.employees))
+        .catch(error =>{
+            toast.error("Something Went Wrong")
+        })
     }
 
     const deleteUser = (userid) => {
-        fetch(`https://mern-admin-backend-jxw3.onrender.com/general/user/delete/${userid}`, {
+        fetch(`${baseUrl}/general/employee/delete/${userid}`, {
             method :'DELETE'
         })
         .then(res => res.json())
@@ -51,15 +57,18 @@ const MainContainer = () => {
 
     const addNewUser =(e) =>{
         e.preventDefault()
-        fetch("https://mern-admin-backend-jxw3.onrender.com/general/user/add", {
+        fetch( `${baseUrl}/general/employee/add`, {
             method :'POST',
-            body: JSON.stringify(form)
+            body: JSON.stringify(form),
+            headers:{
+                'content-type': 'application/json'
+            },
         }).then(res => res.json()).then(data =>{
-            let updatedUsers = users.concat(form)
-            setUsers(updatedUsers)
-            toast.success("User Added Successfully")
-            setForm(userForm)
-            } )
+                let updatedUsers = users.concat({...data,...form})
+                setUsers(updatedUsers)
+                toast.success("User Added Successfully")
+                setForm(userForm)
+            } ).catch(err => toast.error("Something went wrong"))
        };
 
 
@@ -72,9 +81,10 @@ const MainContainer = () => {
 
        const updateUser = (e) =>{
         e.preventDefault()
-        fetch(`https://mern-admin-backend-jxw3.onrender.com/general/user/update/${selectedUserId}`, {
+        fetch(`${baseUrl}/general/employee/update/${selectedUserId}`, {
             method :'PUT',
-            body: JSON.stringify(form)
+            body: JSON.stringify(form),
+            headers:{'content-type': 'application/json'},
         }).then(res => res.json()).then(data =>{
             toast.success("User Updated Successfully")
             setForm(userForm)
@@ -115,12 +125,24 @@ const MainContainer = () => {
                         onChange={handleChange} placeholder="Password" />
                     </div>
                     <div class="col-md-12 my-3">
-                        <input type="text" name={"city"} value={form.city} class="form-control" 
+                        
+                        <input type="radio" id="indore" name={"city"} value={"indore"}  className='m-2 p-2'
                         onChange={handleChange} placeholder="City" />
+                        <label htmlFor='indore'> INDORE </label>
+                        
+                        <input type="radio" id="chennai" name={"city"} value={"Chennai"} className='m-2 p-2'
+                        onChange={handleChange} placeholder="City" />
+                        <label htmlFor='chennai'> CHENNAI </label>
                     </div>
                     <div class="col-md-12 my-3">
-                        <input type="text" name={"occupation"} value={form.occupation} class="form-control" 
-                        onChange={handleChange} placeholder="Occupation" />
+                        <select name="occupation" id="occ" value={form.occupation} 
+                        onChange={handleChange} className='form-control'>
+                            <option value="">Please select</option>
+                            <option value="react developer">React Developer</option>
+                            <option value="node develope">Node Developer</option>
+                            <option value="ui developer">UI Developer</option>
+                            <option value="ux">UX Designer</option>
+                        </select>
                     </div>
                    {
                     isEdit ?
