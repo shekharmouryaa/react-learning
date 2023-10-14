@@ -30,7 +30,7 @@ const AddEmployee = () => {
 
   return (
     <div>
-        AddEmployee
+        Add New Employee
         <div>
             <h3>{"Add New User"}</h3>
             <form onSubmit={ addNewUser}>

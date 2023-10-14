@@ -14,7 +14,7 @@ const deleteEmployee =(email) =>{
 
   return (
     <div>
-        <h3>Employees Details</h3>
+        <h3>Employees List</h3>
                 <table class="table table-striped">
                     <thead>
                         <tr>
