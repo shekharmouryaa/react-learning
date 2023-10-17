@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { addEmployeeAction, updateEmployeeAction } from './redux/actions'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate,useParams } from 'react-router-dom'
 
 const AddEmployee = () => {
     
@@ -16,11 +16,11 @@ const AddEmployee = () => {
     
     const [form , setForm] = useState(userForm)
     const dispatch = useDispatch()
-    const {selectedEmail, employees}  = useSelector(state => state.employeeReducer)
+    const {employees}  = useSelector(state => state.employeeReducer)
 
     const navigate = useNavigate()
-    // const params = useParams()
-    // console.log("params",params)
+    const params = useParams()
+    const selectedEmail =  params?.email
 
 
     // Function call every time when useEffect dependency update
@@ -29,12 +29,14 @@ const AddEmployee = () => {
             let employee = employees.filter(item =>{
                     return item.email === selectedEmail
             })
-            setForm(employee[0])
+            if(employee.length > 0){
+                setForm(employee[0])
+            }
         }else{
             setForm(userForm)
         }       
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[selectedEmail,employees])
+    },[params,employees])
 
     const handleChange = (e) =>{
         setForm({...form, [e.target.name] : e.target.value})

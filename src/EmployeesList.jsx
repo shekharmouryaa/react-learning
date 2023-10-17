@@ -1,7 +1,7 @@
 import moment from 'moment'
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { deleteEmployeeAction, editEmployeeAction } from './redux/actions'
+import { deleteEmployeeAction } from './redux/actions'
 import { useNavigate } from 'react-router-dom'
 
 const EmployeesList = () => {
@@ -16,8 +16,7 @@ const deleteEmployee =(email) =>{
 const navigate = useNavigate()
 
 const editEmployee =(email) =>{
-    dispatch(editEmployeeAction(email))
-    navigate(`/editemployee`)
+    navigate(`/editemployee/${email}`)
 }
   return (
     <div>
