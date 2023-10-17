@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { addEmployeeAction } from './redux/actions'
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { addEmployeeAction, updateEmployeeAction } from './redux/actions'
+import { useNavigate } from 'react-router-dom'
 
 const AddEmployee = () => {
     
@@ -15,6 +16,25 @@ const AddEmployee = () => {
     
     const [form , setForm] = useState(userForm)
     const dispatch = useDispatch()
+    const {selectedEmail, employees}  = useSelector(state => state.employeeReducer)
+
+    const navigate = useNavigate()
+    // const params = useParams()
+    // console.log("params",params)
+
+
+    // Function call every time when useEffect dependency update
+    useEffect(() =>{
+        if(selectedEmail){
+            let employee = employees.filter(item =>{
+                    return item.email === selectedEmail
+            })
+            setForm(employee[0])
+        }else{
+            setForm(userForm)
+        }       
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[selectedEmail,employees])
 
     const handleChange = (e) =>{
         setForm({...form, [e.target.name] : e.target.value})
@@ -26,15 +46,26 @@ const AddEmployee = () => {
         dispatch(addEmployeeAction(form))
         setForm(userForm)
      };
+     const updateEmployee = () =>{
+        let updatedUsers = employees.map(item =>{
+            if(item.email === selectedEmail){
+                return form
+            }else{
+                return item
+            }
+        })
+        dispatch(updateEmployeeAction(updatedUsers))
+        setForm(userForm)
+        navigate("/employees")
+     }
 
 
   return (
     <div>
-        Add New Employee
         <div>
-            <h3>{"Add New User"}</h3>
-            <form onSubmit={ addNewUser}>
-                <div class="form-row row" style={{ width: "300px" }}>
+            <h3 class="mx-3">{selectedEmail ? "Update Employee": "Add New Employee"}</h3>
+            <form onSubmit={selectedEmail ? updateEmployee : addNewUser}>
+                <div class="mx-3 form-row row" style={{ width: "300px" }}>
                     <div class="col-md-12 my-3 ">
                         <input type="text" name={"name"} value={form.name} class="form-control" 
                         onChange={handleChange} placeholder="Full Name" />
@@ -72,7 +103,7 @@ const AddEmployee = () => {
                         </select>
                     </div>
                    {
-                    <button type='submit' className='btn btn-outline-primary'>Submit</button>
+                    <button type='submit' className='btn btn-outline-primary'>{selectedEmail ? "Update": "Submit"}</button>
 
                    }
                 </div>

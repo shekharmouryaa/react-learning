@@ -12,3 +12,17 @@ export const deleteEmployeeAction = (email) =>{
         payload : email
     }
 }
+
+export const editEmployeeAction = (email) =>{
+    return {
+        type : 'EDIT_EMPLOYEE',
+        payload : email
+    }
+}
+
+export const updateEmployeeAction = (updatedUsers) =>{
+    return{
+        type : 'UPDATE_EMPLOYEE',
+        payload : updatedUsers
+    }
+}

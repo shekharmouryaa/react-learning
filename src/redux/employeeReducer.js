@@ -1,6 +1,7 @@
 
 const initialState = {
-    employees : []
+    employees : [],
+    selectedEmail :""
 }
         
 export const employeeReducer = (state = initialState , action) => {
@@ -16,6 +17,17 @@ export const employeeReducer = (state = initialState , action) => {
                 ...state,
                 employees : state.employees.filter(item => item.email !== action.payload)
             }
+            case 'EDIT_EMPLOYEE':
+                return {
+                    ...state,
+                    selectedEmail : action.payload
+                }
+                case 'UPDATE_EMPLOYEE':
+                return {
+                    ...state,
+                    selectedEmail : "",
+                    employees : action.payload
+                }
         default:
             return state
     }

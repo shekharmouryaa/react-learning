@@ -16,6 +16,7 @@ const MainRoutes = () => {
                 <Routes>
                     <Route path="/" element={<HomePage />} />
                     <Route path="/addemployee" element={<AddEmployee />} />
+                    <Route path="/editemployee" element={<AddEmployee />} />
                     <Route path="/employees" element={<EmployeesList />} />
                 </Routes>
             </Router></div>
