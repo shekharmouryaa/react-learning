@@ -1,0 +1,15 @@
+
+step - 1 Redux folder --> store.js--> Create store --> wrap with Provider 
+step - 2 reducer.js ---> appReducers (root reducer)
+step - 3 import appReducers into store 
+step -4 create initialState and employee Reducers function (employeeReducer.js)
+step- 5 create action (action.js) for addEmployee (function name ===> addEmployeeAction)
+step -6 import useDispatch and inside dispatch import addEmployeeAction into inside the submit function
+step -7 pass the data(form) along with action (addEmployeeAction)
+step -8 inside employeeReducer add switch Statement
+step -9 get employees inside the employeeList using useSelector
+
+--------------Flow  Completed-------------
+
+step - 1 create new Action
+
